@@ -1,0 +1,32 @@
+x-connected.view {
+  padding: 0;
+}
+
+x-connected #heading {
+  flex-grow: 1;
+  font-size: 25vmin;
+  display: flex;
+  align-items: center;
+}
+
+x-connected .row {
+  display: flex;
+  width: 100%;
+}
+
+x-connected .row button {
+  flex-grow: 1;
+  flex-basis: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+x-connected #mode,
+x-connected #left {
+  margin-right: 1px; 
+}
+
+x-connected #disconnect,
+x-connected #right {
+  margin-left: 1px;
+}

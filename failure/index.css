@@ -1,0 +1,7 @@
+x-failure button {
+  margin-bottom: 0.5rem;
+}
+
+x-failure button:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "autopilot-remote",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "app-server"
+  },
+  "devDependencies": {
+    "app-server": "github:jessetane/app-server#4.1.1"
+  },
+  "dependencies": {
+    "hyperbind": "^6.2.0",
+    "url-state": "^2.0.3"
+  }
+}
