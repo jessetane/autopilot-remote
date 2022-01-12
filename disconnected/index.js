@@ -2,12 +2,12 @@ import state from '../state/index.js'
 import hb from '/modules/hyperbind/index.js'
 
 const template = document.createElement('template')
-template.innerHTML = `<form>
+template.innerHTML = `<h1><div id=icon>${String.fromCodePoint(0x1F9ED)}</div>Autopilot Remote</h1><form>
   <label id=tls>
     <input name=secure type=checkbox>
     <span>Use TLS</span>
   </label>
-  <input name=host placeholder=Host type=text>
+  <input name=host placeholder=Host type=text autocapitalize=off autocomplete=off>
   <input name=preSharedKey placeholder=Password type=password>
   <button type=submit>Connect</button>
 </form>`

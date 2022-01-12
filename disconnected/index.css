@@ -1,3 +1,12 @@
+x-disconnected {
+  text-align: center;
+}
+
+x-disconnected #icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
 x-disconnected button[type=submit] {
   margin-bottom: 0;
 }

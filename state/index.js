@@ -54,12 +54,8 @@ state.connect = function (peer) {
   const proto = `${peer.secure ? 'wss' : 'ws'}://`
   const url = `${proto}${peer.host}`
   const socket = state.socket = new WebSocket(url)
-  state.mode = null
-  state.heading = null
-  state.timeout = setTimeout(() => {
-    state.error = new Error('websocket failed to open')
-    socket.close()
-  }, 2500)
+  state.mode = state.heading = state.headingLocked = null
+  state.timeout = setTimeout(() => socket.close(), 2500)
   socket.authenticated = false
   socket.addEventListener('open', () => {
     socket.didOpen = true
@@ -67,20 +63,21 @@ state.connect = function (peer) {
     state.timeout = setTimeout(() => {
       state.error = new Error('websocket was unresponsive')
       socket.close()
-    }, 2500)
+    }, 5000)
     socket.send('rw:' + peer.preSharedKey)
   })
   socket.addEventListener('close', () => {
+    clearTimeout(state.timeout)
     delete state.buffer
     delete state.socket
-    if (!state.error) {
+    if (!socket.userClosed) {
       if (socket.didOpen) {
-        state.error = new Error('websocket closed unexpectedly')
+        if (!state.error || state.error.message.indexOf('No data seen') === 0) {
+          state.error = new Error('websocket closed unexpectedly')
+        }
       } else {
         state.error = new Error('websocket failed to open')
       }
-    } else if (state.error.message === 'disconnect') {
-      delete state.error
     }
     state.dispatchEvent(new Event('change'))
   })
@@ -105,7 +102,7 @@ state.connect = function (peer) {
 state.disconnect = function () {
   clearTimeout(state.timeout)
   if (state.socket) {
-    state.error = new Error('disconnect')
+    state.socket.userClosed = true
     state.socket.close()
   } else {
     state.dispatchEvent(new Event('change'))
@@ -113,9 +110,11 @@ state.disconnect = function () {
 }
 
 state.wait = function (shouldDispatch = true) {
+  clearTimeout(state.timeout)
   if (state.socket) {
     state.timeout = setTimeout(() => {
-      state.error = new Error('websocket became unresponsive')
+      state.mode = state.heading = state.headingLocked = null
+      state.error = new Error('No data seen for > 5 seconds')
       state.dispatchEvent(new Event('change'))
     }, 5000)
   }
@@ -126,9 +125,9 @@ state.wait = function (shouldDispatch = true) {
 
 state.toggleMode = function () {
   const mode = !state.mode ? 0x40 : 0x00
-  sendNmea(0, 204, 126208, [0x00, 0x11, 0x01, 0x63, 0xff, 0x00, 0xf8, 0x04])
-  sendNmea(0, 204, 126208, [0x01, 0x01, 0x3b, 0x07, 0x03, 0x04, 0x04, mode])
-  sendNmea(0, 204, 126208, [0x02, 0x00, 0x05, 0xff, 0xff, 0xff, 0xff, 0xff])
+  sendNmea({ destination: 204, pgn: 126208, data: [0x00, 0x11, 0x01, 0x63, 0xff, 0x00, 0xf8, 0x04] })
+  sendNmea({ destination: 204, pgn: 126208, data: [0x01, 0x01, 0x3b, 0x07, 0x03, 0x04, 0x04, mode] })
+  sendNmea({ destination: 204, pgn: 126208, data: [0x02, 0x00, 0x05, 0xff, 0xff, 0xff, 0xff, 0xff] })
 }
 
 state.changeHeading = function (degrees) {
@@ -143,9 +142,9 @@ state.changeHeading = function (degrees) {
 state.setHeading = function (heading) {
   let big = heading >> 8
   let small = heading & 0xff
-  sendNmea(0, 204, 126208, [0x00, 0x0e, 0x01, 0x50, 0xff, 0x00, 0xf8, 0x03])
-  sendNmea(0, 204, 126208, [0x01, 0x01, 0x3b, 0x07, 0x03, 0x04, 0x06, small])
-  sendNmea(0, 204, 126208, [0x02, big, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff])
+  sendNmea({ destination: 204, pgn: 126208, data: [0x00, 0x0e, 0x01, 0x50, 0xff, 0x00, 0xf8, 0x03] })
+  sendNmea({ destination: 204, pgn: 126208, data: [0x01, 0x01, 0x3b, 0x07, 0x03, 0x04, 0x06, small] })
+  sendNmea({ destination: 204, pgn: 126208, data: [0x02, big, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff] })
 }
 
 function receiveNmea (lines) {
@@ -178,7 +177,8 @@ function receiveNmea (lines) {
   })
 }
 
-function sendNmea (source, destination, pgn, data) {
+function sendNmea (params) {
+  const { source, destination, pgn, data } = params
   const cmd = raw.encode({
     id: can.encode({
       pgn,

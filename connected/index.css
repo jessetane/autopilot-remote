@@ -1,32 +1,36 @@
 x-connected.view {
-  padding: 0;
+  padding: 0.5rem;
 }
 
 x-connected #heading {
   flex-grow: 1;
-  font-size: 25vmin;
+  font-size: 35vmin;
+  font-weight: 600;
   display: flex;
   align-items: center;
 }
 
 x-connected .row {
-  display: flex;
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 0.5rem;
 }
 
 x-connected .row button {
-  flex-grow: 1;
-  flex-basis: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 7min;
+}
+
+x-connected button {
+  background: #333;
+  border-radius: 1rem;
+}
+
+x-connected button#left,
+x-connected button#right{
+  font-size: 14vmin;
   padding-top: 2rem;
   padding-bottom: 2rem;
-}
-
-x-connected #mode,
-x-connected #left {
-  margin-right: 1px; 
-}
-
-x-connected #disconnect,
-x-connected #right {
-  margin-left: 1px;
 }

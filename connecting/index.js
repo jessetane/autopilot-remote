@@ -24,8 +24,7 @@ class Connecting extends HTMLElement {
   }
 
   render () {
-    hb(this, {
-    })
+    // hb(this, {})
   }
   
   async onclick (evt) {
@@ -33,6 +32,9 @@ class Connecting extends HTMLElement {
     if (target.nodeName !== 'BUTTON') return
     switch (target.id) {
       case 'cancel':
+        state.disconnect()
+        break
+      default:
         console.log('click', target.id)
     }
   }

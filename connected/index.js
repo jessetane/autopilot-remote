@@ -5,13 +5,13 @@ const circle = Math.PI * 2
 
 const template = document.createElement('template')
 template.innerHTML = `<div class=row>
-  <button id=mode>Lock</button>
+  <button id=mode>Standby</button>
   <button id=disconnect>Disconnect</button>
 </div>
 <div id=heading></div>
 <div class=row>
-  <button id=left>Port</button>
-  <button id=right>Starboard</button>
+  <button id=left>-1\u00b0</button>
+  <button id=right>+1\u00b0</button>
 </div>`
 
 class Connected extends HTMLElement {
@@ -34,17 +34,24 @@ class Connected extends HTMLElement {
 
   render () {
     let heading = state.mode === true ? state.headingLocked : state.heading
-    if (heading === null) {
-      heading = NaN
-    } else {
-      heading = Math.round(heading / 100 / circle * 360) / 100
+    if (heading !== null) {
+      heading = Math.round(heading / 10000 / circle * 360)
     }
     hb(this, {
-      '#mode,#left,#right': {
+      '#mode': {
         $attr: { disabled: state.mode === null ? 'disabled' : null },
       },
-      '#mode': state.mode ? 'Unlock' : 'Lock',
-      '#heading': `${isNaN(heading) ? '0' : heading}\u00b0`
+      '#left,#right': {
+        $attr: { disabled: !state.mode ? 'disabled' : null },
+      },
+      '#mode': {
+        $text: state.mode ? 'Auto' : 'Standby',
+        $class: { red: !state.mode, white: state.mode }
+      },
+      '#heading': {
+        $text: `${heading === null ? '0' : heading}\u00b0`,
+        $attr: { disabled: heading === null ? 'disabled' : null },
+      }
     })
   }
 

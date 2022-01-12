@@ -3,9 +3,11 @@ import hb from '/modules/hyperbind/index.js'
 
 const template = document.createElement('template')
 template.innerHTML = `<h1></h1>
-<button id=reconnect>Reconnect</button>
-<button id=disconnect>Disconnect</button>
-<button id=wait>Wait</button>`
+<div class=row>
+  <button id=wait>Wait</button>
+  <button id=reconnect>Reconnect</button>
+  <button id=disconnect>Disconnect</button>
+</div>`
 
 class Failure extends HTMLElement {
   constructor () {
