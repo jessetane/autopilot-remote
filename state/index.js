@@ -72,7 +72,7 @@ state.connect = function (peer) {
     delete state.socket
     if (!socket.userClosed) {
       if (socket.didOpen) {
-        if (!state.error || state.error.message.indexOf('No data seen') === 0) {
+        if (!state.error || state.error.code === 1) {
           state.error = new Error('websocket closed unexpectedly')
         }
       } else {
@@ -114,7 +114,8 @@ state.wait = function (shouldDispatch = true) {
   if (state.socket) {
     state.timeout = setTimeout(() => {
       state.mode = state.heading = state.headingLocked = null
-      state.error = new Error('No data seen for > 5 seconds')
+      state.error = new Error('WebSocket open but no data received in > 5 seconds')
+      state.error.code = 1
       state.dispatchEvent(new Event('change'))
     }, 5000)
   }
