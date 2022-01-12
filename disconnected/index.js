@@ -14,20 +14,20 @@ template.innerHTML = `<h1><div id=icon>${String.fromCodePoint(0x1F9ED)}</div>Aut
 
 class Disconnected extends HTMLElement {
   constructor () {
-  	super()
-  	this.render = this.render.bind(this)
+    super()
+    this.render = this.render.bind(this)
   }
 
   async connectedCallback () {
     this.classList.add('view')
     this.appendChild(template.content.cloneNode(true))
-  	state.addEventListener('change', this.render)
+    state.addEventListener('change', this.render)
     this.addEventListener('submit', this.onsubmit)
-  	this.render()
+    this.render()
   }
 
   disconnectedCallback () {
-  	state.removeEventListener('change', this.render)
+    state.removeEventListener('change', this.render)
   }
 
   render () {
