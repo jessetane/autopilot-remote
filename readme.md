@@ -5,7 +5,7 @@ Remote control for Raymarine autopilots.
 Sometimes nice to be able to steer from the foredeck, inside, over the internet etc.
 
 ## How
-Assumes target autopilot is connected to an NMEA 2000 (CAN bus) network that is exposed to the web via ["RAW mode protocol"](https://www.yachtd.com/downloads/ydnu02.pdf#page=56) over WebSocket. Assumes the WebSocket server supports a simple auth scheme where the first message sent is a pre-shared key.
+Assumes target autopilot is connected to an NMEA 2000 (CAN bus) network that is exposed to the web via [RAW mode protocol](https://www.yachtd.com/downloads/ydnu02.pdf#page=56) over WebSocket. Assumes the WebSocket server supports a simple auth scheme where the first message sent is a pre-shared key.
 
 Overview of stack used for development and testing:
 * This web app (saved to home screen of a mobile device)
