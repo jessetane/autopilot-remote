@@ -39,14 +39,12 @@ class Connected extends HTMLElement {
     }
     hb(this, {
       '#mode': {
-        $attr: { disabled: state.mode === null ? 'disabled' : null },
+        $text: state.mode ? 'Auto' : 'Standby',
+        $class: { red: !state.mode, white: state.mode },
+        $attr: { disabled: heading === null ? 'disabled' : null }
       },
       '#left,#right': {
         $attr: { disabled: !state.mode ? 'disabled' : null },
-      },
-      '#mode': {
-        $text: state.mode ? 'Auto' : 'Standby',
-        $class: { red: !state.mode, white: state.mode }
       },
       '#heading': {
         $text: `${heading === null ? '0' : heading}\u00b0`,
