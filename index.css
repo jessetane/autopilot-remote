@@ -101,6 +101,8 @@ button {
   font-weight: 600;
   background: #333;
   color: #fff;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 [disabled="disabled"] {
