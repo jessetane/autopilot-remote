@@ -64,7 +64,7 @@ state.connect = function (peer) {
       state.error = new Error('websocket was unresponsive')
       socket.close()
     }, 5000)
-    socket.send('rw:' + peer.preSharedKey)
+    socket.send(peer.preSharedKey)
   })
   socket.addEventListener('close', () => {
     clearTimeout(state.timeout)
@@ -87,7 +87,7 @@ state.connect = function (peer) {
     if (socket.authenticated) {
       receiveNmea(message)
       state.wait(false)
-    } else if (message === 'ack') {
+    } else if (message === 'ok') {
       socket.authenticated = true
       state.dispatchEvent(new Event('change'))
       state.wait(false)
