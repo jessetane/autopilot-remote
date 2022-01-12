@@ -11,5 +11,6 @@
   "dependencies": {
     "hyperbind": "^6.2.0",
     "url-state": "^2.0.3"
-  }
+  },
+  "license": "MIT"
 }
