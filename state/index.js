@@ -55,15 +55,16 @@ state.connect = function (peer) {
   const url = `${proto}${peer.host}`
   const socket = state.socket = new WebSocket(url)
   state.mode = state.heading = state.headingLocked = null
+  clearTimeout(state.timeout)
   state.timeout = setTimeout(() => socket.close(), 2500)
   socket.authenticated = false
   socket.addEventListener('open', () => {
-    socket.didOpen = true
     clearTimeout(state.timeout)
     state.timeout = setTimeout(() => {
-      state.error = new Error('websocket was unresponsive')
+      state.error = new Error('websocket opened but was unresponsive')
       socket.close()
     }, 5000)
+    socket.didOpen = true
     socket.send(peer.preSharedKey)
   })
   socket.addEventListener('close', () => {
@@ -82,8 +83,8 @@ state.connect = function (peer) {
     state.dispatchEvent(new Event('change'))
   })
   socket.addEventListener('message', evt => {
-    const message = evt.data
     clearTimeout(state.timeout)
+    const message = evt.data
     if (socket.authenticated) {
       receiveNmea(message)
       state.wait(false)
