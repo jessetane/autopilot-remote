@@ -16,20 +16,20 @@ template.innerHTML = `<div class=row>
 
 class Connected extends HTMLElement {
   constructor () {
-  	super()
-  	this.render = this.render.bind(this)
+    super()
+    this.render = this.render.bind(this)
   }
 
   async connectedCallback () {
     this.classList.add('view')
     this.appendChild(template.content.cloneNode(true))
-  	state.addEventListener('change', this.render)
+    state.addEventListener('change', this.render)
     this.addEventListener('click', this.onclick)
-  	this.render()
+    this.render()
   }
 
   disconnectedCallback () {
-  	state.removeEventListener('change', this.render)
+    state.removeEventListener('change', this.render)
   }
 
   render () {
