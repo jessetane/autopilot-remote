@@ -61,7 +61,7 @@ state.connect = function (peer) {
   socket.addEventListener('open', () => {
     clearTimeout(state.timeout)
     state.timeout = setTimeout(() => {
-      state.error = new Error('websocket opened but was unresponsive')
+      state.error = new Error('connected but peer was unresponsive')
       socket.close()
     }, 5000)
     socket.didOpen = true
@@ -73,10 +73,10 @@ state.connect = function (peer) {
     if (!socket.userClosed) {
       if (socket.didOpen) {
         if (!state.error || state.error.code === 1) {
-          state.error = new Error('websocket closed unexpectedly')
+          state.error = new Error('connection closed unexpectedly')
         }
       } else {
-        state.error = new Error('websocket failed to open')
+        state.error = new Error('connection failed')
       }
     }
     state.dispatchEvent(new Event('change'))
@@ -117,7 +117,7 @@ state.wait = function (shouldDispatch = true) {
   if (state.socket) {
     state.timeout = setTimeout(() => {
       state.mode = state.heading = state.headingLocked = null
-      state.error = new Error('WebSocket open but no data received in > 5 seconds')
+      state.error = new Error('connected but no data received in > 5 seconds')
       state.error.code = 1
       state.dispatchEvent(new Event('change'))
     }, 7500)
