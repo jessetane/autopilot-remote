@@ -34,6 +34,7 @@ class Connected extends HTMLElement {
   }
 
   disconnectedCallback () {
+    clearTimeout(this.multiplierTimeout)
     state.removeEventListener('change', this.render)
   }
 
@@ -73,6 +74,11 @@ class Connected extends HTMLElement {
   }
 
   onmouseUp (evt) {
+    clearTimeout(this.multiplierTimeout)
+    this.multiplierTimeout = setTimeout(() => {
+      this.multiplier = 1
+      this.render()
+    }, 500)
     var target = evt.target
     if (target.nodeName !== 'BUTTON') return
     switch (target.id) {
@@ -88,12 +94,10 @@ class Connected extends HTMLElement {
       case 'disconnect':
         state.disconnect()
     }
-    clearTimeout(this.multiplierTimeout)
-    this.multiplier = 1
-    setTimeout(this.render, 350)
   }
 
   setMultiplierTimeout () {
+    clearTimeout(this.multiplierTimeout)
     this.multiplierTimeout = setTimeout(() => {
       if (this.multiplier === 1) {
         this.multiplier = 5
