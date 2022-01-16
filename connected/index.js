@@ -60,6 +60,7 @@ class Connected extends HTMLElement {
   }
 
   onmouseDown (evt) {
+    evt.preventDefault()
     var target = evt.target
     if (target.nodeName !== 'BUTTON' || target.disabled) return
     switch (target.id) {
