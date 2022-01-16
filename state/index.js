@@ -84,6 +84,9 @@ state.connect = function (peer) {
   })
   socket.addEventListener('message', evt => {
     clearTimeout(state.timeout)
+    if (state.error && state.error.code == 1) {
+      delete state.error
+    }
     const message = evt.data
     if (socket.authenticated) {
       receiveNmea(message)
@@ -118,7 +121,7 @@ state.wait = function (shouldDispatch = true) {
       state.error = new Error('WebSocket open but no data received in > 5 seconds')
       state.error.code = 1
       state.dispatchEvent(new Event('change'))
-    }, 5000)
+    }, 7500)
   }
   if (shouldDispatch) {
     state.dispatchEvent(new Event('change'))
