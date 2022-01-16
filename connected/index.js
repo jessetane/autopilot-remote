@@ -10,13 +10,15 @@ template.innerHTML = `<div class=row>
 </div>
 <div id=heading></div>
 <div class=row>
-  <button id=left>-1\u00b0</button>
-  <button id=right>+1\u00b0</button>
+  <button id=left>-<span id=multiplier>1</span>\u00b0</button>
+  <button id=right>+<span id=multiplier>1</span>\u00b0</button>
 </div>`
 
 class Connected extends HTMLElement {
   constructor () {
     super()
+    this.multiplier = 1
+    this.direction = 'left'
     this.render = this.render.bind(this)
   }
 
@@ -24,7 +26,10 @@ class Connected extends HTMLElement {
     this.classList.add('view')
     this.appendChild(template.content.cloneNode(true))
     state.addEventListener('change', this.render)
-    this.addEventListener('click', this.onclick)
+    this.addEventListener('mousedown', this.onmouseDown)
+    this.addEventListener('mouseup', this.onmouseUp)
+    this.addEventListener('touchstart', this.onmouseDown)
+    this.addEventListener('touchend', this.onmouseUp)
     this.render()
   }
 
@@ -46,6 +51,7 @@ class Connected extends HTMLElement {
       '#left,#right': {
         $attr: { disabled: !state.mode ? 'disabled' : null },
       },
+      [`#${this.direction} #multiplier`]: this.multiplier,
       '#heading': {
         $text: `${heading === null ? '0' : heading}\u00b0`,
         $attr: { disabled: heading === null ? 'disabled' : null },
@@ -53,7 +59,19 @@ class Connected extends HTMLElement {
     })
   }
 
-  onclick (evt) {
+  onmouseDown (evt) {
+    var target = evt.target
+    if (target.nodeName !== 'BUTTON' || target.disabled) return
+    switch (target.id) {
+      case 'left':
+      case 'right':
+        this.multiplier = 1
+        this.direction = target.id
+        this.setMultiplierTimeout()
+    }
+  }
+
+  onmouseUp (evt) {
     var target = evt.target
     if (target.nodeName !== 'BUTTON') return
     switch (target.id) {
@@ -61,14 +79,31 @@ class Connected extends HTMLElement {
         state.toggleMode()
         break
       case 'left':
-        state.changeHeading(-1)
+        state.changeHeading(-this.multiplier)
         break
       case 'right':
-        state.changeHeading(1)
+        state.changeHeading(this.multiplier)
         break
       case 'disconnect':
         state.disconnect()
     }
+    clearTimeout(this.multiplierTimeout)
+    this.multiplier = 1
+    setTimeout(this.render, 350)
+  }
+
+  setMultiplierTimeout () {
+    this.multiplierTimeout = setTimeout(() => {
+      if (this.multiplier === 1) {
+        this.multiplier = 5
+      } else if (this.multiplier === 5) {
+        this.multiplier = 10
+      } else {
+        this.multiplier += 10
+      }
+      this.setMultiplierTimeout()
+      this.render()
+    }, 500)
   }
 }
 
