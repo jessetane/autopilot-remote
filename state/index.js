@@ -69,7 +69,6 @@ state.connect = function (peer) {
   })
   socket.addEventListener('close', () => {
     clearTimeout(state.timeout)
-    delete state.buffer
     delete state.socket
     if (!socket.userClosed) {
       if (socket.didOpen) {
