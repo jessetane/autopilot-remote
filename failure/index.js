@@ -15,7 +15,7 @@ class Failure extends HTMLElement {
   	this.render = this.render.bind(this)
   }
 
-  async connectedCallback () {
+  connectedCallback () {
     this.classList.add('view')
     this.appendChild(template.content.cloneNode(true))
   	state.addEventListener('change', this.render)
@@ -39,7 +39,7 @@ class Failure extends HTMLElement {
     })
   }
   
-  async onclick (evt) {
+  onclick (evt) {
     var target = evt.target
     if (target.nodeName !== 'BUTTON') return
     delete state.error

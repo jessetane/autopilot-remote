@@ -27,8 +27,8 @@ class Connecting extends HTMLElement {
     // hb(this, {})
   }
   
-  async onclick (evt) {
-    var target = evt.currentTarget
+  onclick (evt) {
+    var target = evt.target
     if (target.nodeName !== 'BUTTON') return
     switch (target.id) {
       case 'cancel':

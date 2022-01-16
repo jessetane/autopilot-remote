@@ -18,7 +18,7 @@ class Disconnected extends HTMLElement {
     this.render = this.render.bind(this)
   }
 
-  async connectedCallback () {
+  connectedCallback () {
     this.classList.add('view')
     this.appendChild(template.content.cloneNode(true))
     state.addEventListener('change', this.render)
@@ -43,7 +43,7 @@ class Disconnected extends HTMLElement {
     })
   }
 
-  async onsubmit (evt) {
+  onsubmit (evt) {
     const secure = this.querySelector('[name=secure]').checked
     const host = this.querySelector('[name=host]').value
     const preSharedKey = this.querySelector('[name=preSharedKey]').value
