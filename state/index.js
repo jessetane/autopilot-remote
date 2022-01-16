@@ -68,6 +68,7 @@ state.connect = function (peer) {
     socket.send(peer.preSharedKey)
   })
   socket.addEventListener('close', () => {
+    if (socket !== state.socket) return
     clearTimeout(state.timeout)
     delete state.socket
     if (!socket.userClosed) {
@@ -107,6 +108,7 @@ state.disconnect = function () {
   if (state.socket) {
     state.socket.userClosed = true
     state.socket.close()
+    state.socket.dispatchEvent(new Event('close'))
   } else {
     state.dispatchEvent(new Event('change'))
   }
