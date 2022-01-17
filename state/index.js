@@ -74,7 +74,10 @@ state.connect = function (peer) {
     if (!socket.userClosed) {
       if (socket.didOpen) {
         if (!state.error || state.error.code === 1) {
-          state.error = new Error('connection closed unexpectedly')
+          // state.error = new Error('connection closed unexpectedly')
+          delete state.error
+          this.connect()
+          return
         }
       } else {
         state.error = new Error('connection failed')
