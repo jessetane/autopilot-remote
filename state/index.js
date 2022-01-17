@@ -84,7 +84,7 @@ state.connect = function (peer) {
   })
   socket.addEventListener('message', evt => {
     clearTimeout(state.timeout)
-    if (state.error && state.error.code == 1) {
+    if (state.error && state.error.code === 1) {
       delete state.error
     }
     const message = evt.data
