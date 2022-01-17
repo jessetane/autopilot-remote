@@ -32,6 +32,7 @@ class Connected extends HTMLElement {
     this.addEventListener('mousedown', this.onmouseDown)
     this.addEventListener('mouseup', this.onmouseUp)
     this.addEventListener('touchstart', this.onmouseDown)
+    this.addEventListener('touchcancel', this.onmouseUp)
     this.addEventListener('touchend', this.onmouseUp)
     this.render()
   }
