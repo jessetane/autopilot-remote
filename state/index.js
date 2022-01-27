@@ -1,6 +1,6 @@
 import url from '/modules/url-state/index.js'
-import raw from '/app/raw/index.js'
-import can from '/app/can/index.js'
+import raw from '../raw/index.js'
+import can from '../can/index.js'
 
 const circle = Math.PI * 2
 

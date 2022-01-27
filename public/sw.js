@@ -1,1 +1,1 @@
-../service-worker/index.js
+../sw.js

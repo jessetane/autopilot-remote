@@ -40,6 +40,6 @@ class App extends HTMLElement {
   }
 }
 
-customElements.define('x-app', App)
-
 window.app = document.querySelector('x-app')
+customElements.define('x-app', App)
+navigator.serviceWorker.register('/sw.js')
