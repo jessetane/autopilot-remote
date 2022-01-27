@@ -11,16 +11,10 @@
     <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
     <meta name=apple-mobile-web-app-capable content=yes>
     <link rel=apple-touch-startup-image>
+    <script src=/app/apple-touch-startup-image/index.js async></script>
   </head>
   <body>
     <x-app></x-app>
-    <script>
-      const devicePixelRatio = window.devicePixelRatio || 1
-      const deviceWidth = window.screen.width * devicePixelRatio
-      const deviceHeight = window.screen.height * devicePixelRatio
-      const link = document.querySelector('link[rel="apple-touch-startup-image"]')
-      link.setAttribute('href', `https://dummyimage.com/${deviceWidth}x${deviceHeight}/000000/000000.png&text=%20`)
-    </script>
     <script>navigator.serviceWorker.register('/sw.js')</script>
     <script type=module src=/app/index.js></script>
   </body>
