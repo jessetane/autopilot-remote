@@ -1,22 +1,7 @@
 # autopilot-remote
 Remote control for Raymarine autopilots.
 
-<table>
-  <tr>
-    <td width=20%><img src=/screenshots/1.png></td>
-    <td width=20%><img src=/screenshots/2.png></td>
-    <td width=20%><img src=/screenshots/3.png></td>
-    <td width=20%><img src=/screenshots/4.png></td>
-    <td width=20%><img src=/screenshots/5.png></td>
-  </tr>
-  <tr>
-    <td align=center>Connect</td>
-    <td align=center>Standby</td>
-    <td align=center>Auto</td>
-    <td align=center>Press and hold for -/+5</td>
-    <td align=center>Keep holding for -/+10 or more</td>
-  </tr>
-</table>
+![Screenshots](/screenshots/table.png)
 
 ## Why
 Sometimes nice to be able to steer from the foredeck, inside, over the internet etc.
