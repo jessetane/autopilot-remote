@@ -1,4 +1,4 @@
-const version = 'v3'
+const version = '1.1.0'
 
 const files = [
   '/',
