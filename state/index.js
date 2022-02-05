@@ -4,6 +4,8 @@ import can from '../can/index.js'
 
 const circle = Math.PI * 2
 
+const acksMax = 3
+
 const state = window.state = new EventTarget()
 
 state.url = url
@@ -132,8 +134,11 @@ state.wait = function (shouldDispatch = true) {
   }
 }
 
-state.toggleMode = function () {
-  const mode = !state.mode ? 0x40 : 0x00
+state.setMode = function (on) {
+  const mode = on ? 0x40 : 0x00
+  if (!state.desiredMode || mode !== state.desiredMode.value) {
+    state.desiredMode = { acks: 0, value: mode }
+  }
   sendNmea({ destination: 204, pgn: 126208, data: [0x00, 0x11, 0x01, 0x63, 0xff, 0x00, 0xf8, 0x04] })
   sendNmea({ destination: 204, pgn: 126208, data: [0x01, 0x01, 0x3b, 0x07, 0x03, 0x04, 0x04, mode] })
   sendNmea({ destination: 204, pgn: 126208, data: [0x02, 0x00, 0x05, 0xff, 0xff, 0xff, 0xff, 0xff] })
@@ -149,6 +154,9 @@ state.changeHeading = function (degrees) {
 }
 
 state.setHeading = function (heading) {
+  if (!state.desiredHeading || heading !== state.desiredHeading.value) {
+    state.desiredHeading = { acks: 0, value: heading }
+  }
   let big = heading >> 8
   let small = heading & 0xff
   sendNmea({ destination: 204, pgn: 126208, data: [0x00, 0x0e, 0x01, 0x50, 0xff, 0x00, 0xf8, 0x03] })
@@ -166,6 +174,13 @@ function receiveNmea (lines) {
         state.mode = mode
         state.dispatchEvent(new Event('change'))
       }
+      if (state.desiredMode) {
+        if (++state.desiredMode.acks > acksMax || mode === state.desiredValue.value) {
+          delete state.desiredMode
+        } else {
+          state.setMode(state.desiredMode.value)
+        }
+      }
     } else if (pgn === 65359) { // pilot heading
       const small = message.data[5]
       const big = message.data[6]
@@ -181,6 +196,13 @@ function receiveNmea (lines) {
       if (headingLocked !== state.headingLocked) {
         state.headingLocked = headingLocked
         state.dispatchEvent(new Event('change'))
+      }
+      if (state.desiredHeading) {
+        if (++state.desiredHeading.acks > acksMax || headingLocked === state.desiredHeading.value) {
+          delete state.desiredHeading
+        } else {
+          state.setHeading(state.desiredHeading.value)
+        }
       }
     }
   })

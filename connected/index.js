@@ -93,7 +93,7 @@ class Connected extends HTMLElement {
     if (target.nodeName !== 'BUTTON') return
     switch (target.id) {
       case 'mode':
-        state.toggleMode()
+        state.setMode(!state.mode)
         break
       case 'left':
         state.changeHeading(-multiplier)
