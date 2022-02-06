@@ -150,7 +150,7 @@ state.setMode = function (on) {
 state.changeHeading = function (degrees) {
   const circleHires = circle * 10000
   const radians = degrees / 360 * circleHires
-  let newHeading = (state.desiredHeading ? state.desiredHeading.vlaue : state.headingLocked) + radians
+  let newHeading = (state.desiredHeading ? state.desiredHeading.value : state.headingLocked) + radians
   if (newHeading > circleHires) newHeading -= circleHires
   else if (newHeading < 0) newHeading += circleHires
   state.setHeading(newHeading)
@@ -178,7 +178,7 @@ function receiveNmea (lines) {
         state.dispatchEvent(new Event('change'))
       }
       if (state.desiredMode) {
-        if (++state.desiredMode.acks > acksMax || mode === state.desiredValue.value) {
+        if (++state.desiredMode.acks > acksMax || mode === state.desiredMode.value) {
           delete state.desiredMode
         } else {
           state.setMode(state.desiredMode.value)
