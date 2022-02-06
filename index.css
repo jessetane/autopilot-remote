@@ -1,6 +1,5 @@
 @import 'connected/index.css';
 @import 'disconnected/index.css';
-@import 'connecting/index.css';
 @import 'failure/index.css';
 
 * {
