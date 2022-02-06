@@ -73,6 +73,8 @@ state.connect = function (peer) {
     if (socket !== state.socket) return
     clearTimeout(state.timeout)
     delete state.socket
+    delete state.desiredMode
+    delete state.desiredHeading
     if (!socket.userClosed) {
       if (socket.didOpen) {
         if (!state.error || state.error.code === 1) {
@@ -139,6 +141,7 @@ state.setMode = function (on) {
   if (!state.desiredMode || mode !== state.desiredMode.value) {
     state.desiredMode = { acks: 0, value: mode }
   }
+  delete state.desiredHeading
   sendNmea({ destination: 204, pgn: 126208, data: [0x00, 0x11, 0x01, 0x63, 0xff, 0x00, 0xf8, 0x04] })
   sendNmea({ destination: 204, pgn: 126208, data: [0x01, 0x01, 0x3b, 0x07, 0x03, 0x04, 0x04, mode] })
   sendNmea({ destination: 204, pgn: 126208, data: [0x02, 0x00, 0x05, 0xff, 0xff, 0xff, 0xff, 0xff] })
